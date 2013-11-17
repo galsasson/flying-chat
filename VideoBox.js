@@ -105,18 +105,18 @@ function VideoBox(x, y, lw, rw, vid, local)
   		context.translate(posX, posY);
 
    		// draw left wings
-   		context.translate(-sizeX/2, sizeY/3);
+   		context.translate(-sizeX/2+20, sizeY/3);
    		context.rotate(leftWingRot);
   		context.drawImage(leftWing, -leftWing.width, -leftWing.height/2);
   		context.rotate(-leftWingRot);
-  		context.translate(sizeX/2, -sizeY/3);
+  		context.translate(sizeX/2-20, -sizeY/3);
 
    		// draw right wings
-   		context.translate(sizeX/2, sizeY/3);
+   		context.translate(sizeX/2-20, sizeY/3);
    		context.rotate(rightWingRot);
   		context.drawImage(rightWing, 0, -rightWing.height/2);
   		context.rotate(-rightWingRot);
-  		context.translate(-sizeX/2, -sizeY/3);
+  		context.translate(-sizeX/2+20, -sizeY/3);
 
   		// draw video frame
   		context.scale(-1, 1);
