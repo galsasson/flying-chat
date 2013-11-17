@@ -1,7 +1,9 @@
-function VideoBox(x, y, vid)
+function VideoBox(x, y, lw, rw, vid)
 {
 	var posX = x;
 	var posY = y;
+	var rightWing = rw;
+	var leftWing = lw;
 	var video = vid;
 	var velX = 0, velY = 0;
 	var accX = 0, accY = 0;
@@ -15,6 +17,14 @@ function VideoBox(x, y, vid)
 	var pContext = null;
 	var processor = null;
 
+	var leftWingVel = 0;
+	var rightWingVel = 0;
+	var leftWingT = 0;
+	var rightWingT = 0;
+	var leftWingRot = 0;
+	var rightWingRot = 0;
+
+
 	this.init = function()
 	{
 		// create private canvas to get video pixel data
@@ -25,7 +35,6 @@ function VideoBox(x, y, vid)
 
   		// create the processor and initialize the background with the current video frame
 		processor = new Processor(sizeX, sizeY);
-		this.initBackground();
 	}
 
 	this.applyForce = function(forceX, forceY)
@@ -43,22 +52,32 @@ function VideoBox(x, y, vid)
 		// process new video frame
 		var cFrame = this.readFrame(video);
 		var movement = processor.getMovement(cFrame);
+
+		// handle hands movement
 		if (movement.right*moveFactor > 200) {
     		// println("right = " + rightMovement);
     		var force = movement.right/300;
-    		this.applyForce(force, -force*2);
+    		this.applyForce(-force, -force*3);
+			rightWingVel += force/15; 
   		}
 		if (movement.left*moveFactor > 200) {
     		// println("right = " + rightMovement);
     		var force = movement.left/300;
-    		this.applyForce(-force, -force*2);
+    		this.applyForce(force, -force*3);
+			leftWingVel += force/15; 
   		}
 
+  		// apply parameters
 		velX += accX;
 		velY += accY;
 
 		posX += velX;
 		posY += velY;
+
+		leftWingT += leftWingVel;
+		rightWingT += rightWingVel;
+		leftWingRot = 0.3 + Math.sin(leftWingT)*Math.PI/4 - Math.PI/8;
+		rightWingRot = -0.3 - Math.sin(rightWingT)*Math.PI/4 + Math.PI/8;
 
 		this.applyBounds(canvas.width, canvas.height);
 
@@ -66,17 +85,38 @@ function VideoBox(x, y, vid)
 		accY = 1;	// gravity
 
 		// friction
-		velX *= 0.96;
-		velY *= 0.96;
+		velX *= 0.9;
+		velY *= 0.9;
+
+		leftWingVel *= 0.7;
+		rightWingVel *= 0.7;
+
 	}
 
 	this.draw = function(context)
 	{
+  		context.translate(posX, posY);
+
+   		// draw left wings
+   		context.translate(-sizeX/2, sizeY/3);
+   		context.rotate(leftWingRot);
+  		context.drawImage(leftWing, -leftWing.width, -leftWing.height/2);
+  		context.rotate(-leftWingRot);
+  		context.translate(sizeX/2, -sizeY/3);
+
+   		// draw right wings
+   		context.translate(sizeX/2, sizeY/3);
+   		context.rotate(rightWingRot);
+  		context.drawImage(rightWing, 0, -rightWing.height/2);
+  		context.rotate(-rightWingRot);
+  		context.translate(-sizeX/2, -sizeY/3);
+
+  		// draw video frame
   		context.scale(-1, 1);
-  		context.translate(-posX, posY);
-  		context.drawImage(video, -sizeX, 0, sizeX, sizeY);
-  		context.translate(posX, -posY);
+ 		context.drawImage(video, -sizeX/2, 0, sizeX, sizeY);
   		context.scale(-1, 1);
+
+  		context.translate(-posX, -posY);
 	}
 
 	this.applyBounds = function(w, h)
@@ -85,9 +125,9 @@ function VideoBox(x, y, vid)
 			velX *= -1;
 			posX = 0;
 		}
-		else if (posX > w - sizeX) {
+		else if (posX > w) {
 			velX *= -1;
-			posX = w - sizeX;
+			posX = w;
 		}
 
 		if (posY < 0) {
@@ -98,17 +138,6 @@ function VideoBox(x, y, vid)
 			velY *= -1;
 			posY = h - sizeY;
 		}
-	}
-
-
-	this.initBackground = function()
-	{
-		if (!video) {
-			return;
-		}
-
-		var curFrame = this.readFrame(video);
-		processor.initBackground(curFrame);
 	}
 
 	this.readFrame = function(video)

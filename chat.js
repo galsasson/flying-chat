@@ -19,7 +19,10 @@ var frameCount = 0;
 var myBox = null;
 var theirBox = null;
 
-var images = [{'src': "/bkg.png", 'loaded':false, 'img':null}];
+var images = [{'src': "/bkg.png", 'loaded':false, 'img':null},
+              {'src': "/leftwing.png", 'loaded':false, 'img':null},
+              {'src': "/rightwing.png", 'loaded':false, 'img':null},
+              {'src': "/video_mask.png", 'loaded':false, 'img':null}];
 var numImagesLoaded = 0;
 
 var callBtn;
@@ -90,7 +93,7 @@ function startMyStream(stream)
   myVideo.play();
   myVideo.style.visibility = "hidden";
 
-  myBox = new VideoBox(0, 0, myVideo);
+  myBox = new VideoBox(0, 0, images[1].img, images[2].img, myVideo);
   myBox.init();
 
   requestAnimationFrame(draw);
@@ -104,7 +107,7 @@ function startTheirStream(stream)
   theirVideo.play();
   theirVideo.style.visibility = "hidden";
 
-  theirBox = new VideoBox(0, 0, theirVideo);
+  theirBox = new VideoBox(0, 0, images[1].img, images[2].img, theirVideo);
   theirBox.init();
 }
 

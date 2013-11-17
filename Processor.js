@@ -10,11 +10,6 @@ function Processor(w, h)
 	// RGBA of previous frame
 	var prevFrame = [];
 
-	this.initBackground = function(background)
-	{
-		backFrame = background;
-	}
-
 	this.getMovement = function(frame) {
 		var movement = {'left':0, 'right':0};
 
@@ -43,7 +38,7 @@ function Processor(w, h)
       			var diffSum = diffR + diffG + diffB;
       
       			if (diffSum > 50) {
-      				movement.left++;
+      				movement.right++;
       			}
       		}
 
@@ -70,7 +65,7 @@ function Processor(w, h)
       			var diffSum = diffR + diffG + diffB;
       
       			if (diffSum > 50) {
-      				movement.right++;
+      				movement.left++;
       			}
     		}
   		}
