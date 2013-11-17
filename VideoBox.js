@@ -62,13 +62,13 @@ function VideoBox(x, y, lw, rw, vid, local)
     			// println("right = " + rightMovement);
     			var force = movement.right/300;
     			this.applyForce(-force, -force*3);
-				rightWingVel += force/15; 
+				rightWingVel += force/10; 
   			}
 			if (movement.left*moveFactor > 200) {
     			// println("right = " + rightMovement);
     			var force = movement.left/300;
     			this.applyForce(force, -force*3);
-				leftWingVel += force/15; 
+				leftWingVel += force/10; 
   			}
 
 	  		// apply parameters
@@ -77,25 +77,27 @@ function VideoBox(x, y, lw, rw, vid, local)
 
 			posX += velX;
 			posY += velY;
+
+			this.applyBounds(canvas.width, canvas.height);
+
+			accX = 0;
+			accY = 0.7;	// gravity
+
+			// friction
+			velX *= 0.9;
+			velY *= 0.9;
   		}
 
+  		// handle wings rotation based on wings rotation velocity
 		leftWingT += leftWingVel;
 		rightWingT += rightWingVel;
 		leftWingRot = 0.3 + Math.sin(leftWingT)*Math.PI/4 - Math.PI/8;
 		rightWingRot = -0.3 - Math.sin(rightWingT)*Math.PI/4 + Math.PI/8;
 
-		this.applyBounds(canvas.width, canvas.height);
-
-		accX = 0;
-		accY = 1;	// gravity
-
-		// friction
-		velX *= 0.9;
-		velY *= 0.9;
-
-		leftWingVel *= 0.7;
-		rightWingVel *= 0.7;
-
+		if (isLocal) {
+			leftWingVel *= 0.7;
+			rightWingVel *= 0.7;			
+		}
 	}
 
 	this.draw = function(context)
