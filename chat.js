@@ -93,7 +93,7 @@ function startMyStream(stream)
   myVideo.play();
   myVideo.style.visibility = "hidden";
 
-  myBox = new VideoBox(0, 0, images[1].img, images[2].img, myVideo);
+  myBox = new VideoBox(0, 0, images[1].img, images[2].img, myVideo, true);
   myBox.init();
 
   requestAnimationFrame(draw);
@@ -107,7 +107,7 @@ function startTheirStream(stream)
   theirVideo.play();
   theirVideo.style.visibility = "hidden";
 
-  theirBox = new VideoBox(0, 0, images[1].img, images[2].img, theirVideo);
+  theirBox = new VideoBox(0, 0, images[1].img, images[2].img, theirVideo, false);
   theirBox.init();
 }
 
@@ -122,7 +122,7 @@ function callEnded()
 function initPeerjs()
 {
   // peerjs stuff
-  peer = new Peer({ key: 'sgqbz6uzemf5hfr', debug: 3, config: {'iceServers': [
+  peer = new Peer({ key: 'sgqbz6uzemf5hfr', debug: 1, config: {'iceServers': [
     { url: 'stun:stun.l.google.com:19302' } // Pass in optional STUN and TURN server for maximum network compatibility
   ]}});
 
@@ -154,7 +154,9 @@ function attachDataConnListeners()
 
     // Receive messages
     connection.on('data', function(data) {
-      console.log('Received', data);
+      if (theirBox) {
+        theirBox.setValues(data);
+      }
     });
 }
 
@@ -205,7 +207,12 @@ function draw()
   // draw my video box
   if (myBox) {
     myBox.update(chatCanvas);
-    myBox.draw(chatContext);  
+    if (connection) {
+      if (frameCount%2 == 0) {
+        myBox.sendParams(connection);
+      }
+    }
+    myBox.draw(chatContext);
   }
 
   if (theirBox) {

@@ -1,10 +1,11 @@
-function VideoBox(x, y, lw, rw, vid)
+function VideoBox(x, y, lw, rw, vid, local)
 {
 	var posX = x;
 	var posY = y;
 	var rightWing = rw;
 	var leftWing = lw;
 	var video = vid;
+	var isLocal = local;
 	var velX = 0, velY = 0;
 	var accX = 0, accY = 0;
 	var mass = 10;
@@ -23,6 +24,7 @@ function VideoBox(x, y, lw, rw, vid)
 	var rightWingT = 0;
 	var leftWingRot = 0;
 	var rightWingRot = 0;
+
 
 
 	this.init = function()
@@ -50,29 +52,32 @@ function VideoBox(x, y, lw, rw, vid)
 		}
 
 		// process new video frame
-		var cFrame = this.readFrame(video);
-		var movement = processor.getMovement(cFrame);
+		if (isLocal)
+		{
+			var cFrame = this.readFrame(video);
+			var movement = processor.getMovement(cFrame);
 
-		// handle hands movement
-		if (movement.right*moveFactor > 200) {
-    		// println("right = " + rightMovement);
-    		var force = movement.right/300;
-    		this.applyForce(-force, -force*3);
-			rightWingVel += force/15; 
+			// handle hands movement
+			if (movement.right*moveFactor > 200) {
+    			// println("right = " + rightMovement);
+    			var force = movement.right/300;
+    			this.applyForce(-force, -force*3);
+				rightWingVel += force/15; 
+  			}
+			if (movement.left*moveFactor > 200) {
+    			// println("right = " + rightMovement);
+    			var force = movement.left/300;
+    			this.applyForce(force, -force*3);
+				leftWingVel += force/15; 
+  			}
+
+	  		// apply parameters
+			velX += accX;
+			velY += accY;
+
+			posX += velX;
+			posY += velY;
   		}
-		if (movement.left*moveFactor > 200) {
-    		// println("right = " + rightMovement);
-    		var force = movement.left/300;
-    		this.applyForce(force, -force*3);
-			leftWingVel += force/15; 
-  		}
-
-  		// apply parameters
-		velX += accX;
-		velY += accY;
-
-		posX += velX;
-		posY += velY;
 
 		leftWingT += leftWingVel;
 		rightWingT += rightWingVel;
@@ -117,6 +122,22 @@ function VideoBox(x, y, lw, rw, vid)
   		context.scale(-1, 1);
 
   		context.translate(-posX, -posY);
+	}
+
+	this.setValues = function(data)
+	{
+		posX = data.x;
+		posY = data.y;
+		leftWingVel = data.lv;
+		rightWingVel = data.rv;
+	}
+
+	this.sendParams = function(conn)
+	{
+		if (conn) {
+			var data = {'x':posX, 'y':posY, 'lv':leftWingVel, 'rv':rightWingVel};
+			conn.send(data);
+		}
 	}
 
 	this.applyBounds = function(w, h)
