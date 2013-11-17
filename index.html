@@ -13,27 +13,23 @@
 
 <body>
 
-    <div class="pure-u-1-3">
-      <!-- Big chat canvas -->
-      <div>
-      <p>Your id: <span id="my-id">...</span></p>
+    <!-- video elements -->
+    <div style="position: fixed; left: 0px; top: 0px;">
+      <video id="my-video" width="160" height="120" style="position: fixed; left: 0px; top: 0px;"></video>
+      <video id="their-video" width="160" height="120" style="position: fixed; left: 0px; top: 0px;"></video>
+    </div>
+
+    <!-- Big chat canvas -->
+    <div style="position: fixed; left: 10px; top: 10px;">
+      Your id: <span id="my-id">...</span>
       <div class="pure-form">
         <input type="text" placeholder="Call user id..." id="callto-id">
         <a href="#" class="pure-button pure-button-success" id="make-call">Call</a>
         <a href="#" class="pure-button pure-button-error" id="end-call">End call</a>
       </div>
 
-      <canvas id="chat-canvas" width="1000" height="500"></canvas>
-      </div>
-
-      <!-- video elements -->
-      <div>
-        <video id="my-video" width="160" height="120"></video>
-        <video id="their-video" width="160" height="120"></video>
-      </div>
-      
-
-    </div>
+      <canvas id="chat-canvas" width="1200" height="600" style="position: fixed; left: 10px; top: 80px;"></canvas>
+    </div>      
   </body>
 </html>
 
