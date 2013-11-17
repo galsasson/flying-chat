@@ -19,13 +19,34 @@ var frameCount = 0;
 var myBox = null;
 var theirBox = null;
 
-var images = [{'src': "/bkg.png", 'loaded':false, 'img':null},
-              {'src': "/aaa.png", 'loaded':false, 'img':null}];
+var images = [{'src': "/bkg.png", 'loaded':false, 'img':null}];
 var numImagesLoaded = 0;
+
+var callBtn;
+var endCallBtn;
 
 // entry point after page load
 function setup()
 {
+  myVideo = document.getElementById("my-video");
+  theirVideo = document.getElementById("their-video");
+
+  chatCanvas = document.getElementById("chat-canvas");
+  chatContext = chatCanvas.getContext("2d");
+
+  // call / end-call buttons
+  callBtn = document.getElementById("make-call");
+  endCallBtn = document.getElementById("end-call");
+  endCallBtn.style.visibility = "hidden";
+  callBtn.onclick = function() {
+    var id = $('#callto-id').val();
+    outgoingCall(id);    
+  };
+
+  endCallBtn.onclick = function() {
+    existingCall.close();
+  };
+
   // preload all images.
   // after all images are loaded initializeVideo will be called
   preloadImages(initializeVideo);
@@ -54,12 +75,6 @@ function imageLoadDone(onDone)
 
 function initializeVideo()
 {
-  myVideo = document.getElementById("my-video");
-  theirVideo = document.getElementById("their-video");
-
-  chatCanvas = document.getElementById("chat-canvas");
-  chatContext = chatCanvas.getContext("2d");
-
   // Get audio/video stream
   navigator.getUserMedia({audio: true, video: true}, startMyStream, function() {});
 }
@@ -93,9 +108,12 @@ function startTheirStream(stream)
   theirBox.init();
 }
 
-function stopTheirStream()
+function callEnded()
 {
   theirBox = null;
+
+  callBtn.style.visibility = "visible";
+  endCallBtn.style.visibility = "hidden";
 }
 
 function initPeerjs()
@@ -122,21 +140,6 @@ function initPeerjs()
 
   peer.on('error', function(err){
     alert(err.message);
-    // Return to step 2 if error occurs
-    // step2();
-  });
-
-  // call button
-  $(function(){
-    $('#make-call').click(function(){
-      // Initiate a call!
-      var id = $('#callto-id').val();
-      outgoingCall(id);
-    });
-
-    $('#end-call').click(function(){
-      existingCall.close();
-    });
   });
 }
 
@@ -179,12 +182,10 @@ function connectWithCall(call)
   // Wait for stream on the call, then set peer video display
   call.on('stream', startTheirStream);
 
-  call.on('close', stopTheirStream);
+  call.on('close', callEnded);
 
-//  $('#their-id').text(call.peer);
-  // $('#step1, #step2').hide();
-  // $('#step3').show();
-
+  callBtn.style.visibility = "hidden";
+  endCallBtn.style.visibility = "visible";
 }
 
 function draw()
