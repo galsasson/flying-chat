@@ -13,13 +13,13 @@
 
 <body>
 
-    <!-- video elements -->
+    <!-- hidden video elements -->
     <div style="position: fixed; left: 0px; top: 0px;">
       <video id="my-video" width="160" height="120" muted="true" style="position: fixed; left: 0px; top: 0px;"></video>
       <video id="their-video" width="160" height="120" style="position: fixed; left: 0px; top: 0px;"></video>
     </div>
 
-    <!-- Big chat canvas -->
+    <!-- self id, text input, and call buttons -->
     <div style="position: fixed; left: 10px; top: 10px;">
       Your id: <span id="my-id">...</span>
       <div class="pure-form">
@@ -28,7 +28,8 @@
         <a href="#" class="pure-button pure-button-error" id="end-call">End call</a>
       </div>
 
-      <canvas id="chat-canvas" width="1200" height="550" style="position: fixed; left: 10px; top: 80px;"></canvas>
+      <!-- Big chat canvas -->
+      <canvas id="chat-canvas" width="1200" height="600" style="position: fixed; left: 10px; top: 80px;"></canvas>
     </div>      
   </body>
 </html>
