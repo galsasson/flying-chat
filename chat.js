@@ -19,10 +19,12 @@ var frameCount = 0;
 var myBox = null;
 var theirBox = null;
 
-var images = [{'src': "/bkg.png", 'loaded':false, 'img':null},
-              {'src': "/leftwing.png", 'loaded':false, 'img':null},
-              {'src': "/rightwing.png", 'loaded':false, 'img':null},
-              {'src': "/birdsmall2.png", 'loaded':false, 'img':null}];
+var images = [{'src': "/img/bkg.png", 'loaded':false, 'img':null},
+              {'src': "/img/leftwing.png", 'loaded':false, 'img':null},
+              {'src': "/img/rightwing.png", 'loaded':false, 'img':null},
+              {'src': "/img/bird.png", 'loaded':false, 'img':null},
+              {'src': "/img/siton.png", 'loaded':false, 'img':null},
+              {'src': "/img/hidespot.png", 'loaded':false, 'img':null}];
 var numImagesLoaded = 0;
 
 var callBtn;
@@ -204,6 +206,9 @@ function draw()
   // draw the background
   chatContext.drawImage(images[0].img, 0, 0, chatCanvas.width, chatCanvas.height);
 
+  // draw sit on spot
+  chatContext.drawImage(images[4].img, chatCanvas.width-200, 145);
+
   // draw my video box
   if (myBox) {
     myBox.update(chatCanvas);
@@ -219,6 +224,10 @@ function draw()
     theirBox.update(chatCanvas);
     theirBox.draw(chatContext);      
   }
+
+  // draw hide spot
+  chatContext.drawImage(images[5].img, -50, chatCanvas.height-250);
+
 
   requestAnimationFrame(draw);
   frameCount++;

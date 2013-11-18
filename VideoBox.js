@@ -26,7 +26,7 @@ function VideoBox(x, y, vid, local)
 	var leftWingRot = 0;
 	var rightWingRot = 0;
 
-
+	var lastPosX = x, lastPosY = y;
 
 	this.init = function()
 	{
@@ -87,6 +87,9 @@ function VideoBox(x, y, vid, local)
 			// friction
 			velX *= 0.9;
 			velY *= 0.9;
+
+			lastPosX = posX;
+			lastPosY = posY;
   		}
 
   		// handle wings rotation based on wings rotation velocity
@@ -125,7 +128,7 @@ function VideoBox(x, y, vid, local)
   		context.scale(-1, 1);
 
   		// draw bird image on top of video
- 		context.drawImage(birdImg, -sizeX/2-8, -30);
+ 		context.drawImage(birdImg, -sizeX/2-8, -35);
 
 
   		context.translate(-posX, -posY);
@@ -165,6 +168,16 @@ function VideoBox(x, y, vid, local)
 		else if (posY > h - sizeY) {
 			velY *= -1;
 			posY = h - sizeY;
+		}
+
+		// handle sit on spot
+		if (posX > w - 250) {
+			if (posY > 30) {
+				velX *= -1;
+				velY *= -1;
+				posX = lastPosX;
+				posY = lastPosY;
+			}
 		}
 	}
 
