@@ -179,8 +179,4 @@ function VideoBox(x, y, vid, local)
 
   		return pContext.getImageData(0, 0, sizeX, sizeY);
 	}
-
-
-
-
 }
