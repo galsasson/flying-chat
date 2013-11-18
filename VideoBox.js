@@ -1,9 +1,10 @@
-function VideoBox(x, y, lw, rw, vid, local)
+function VideoBox(x, y, vid, local)
 {
 	var posX = x;
 	var posY = y;
-	var rightWing = rw;
-	var leftWing = lw;
+	var leftWing = images[1].img;
+	var rightWing = images[2].img;
+	var birdImg = images[3].img;
 	var video = vid;
 	var isLocal = local;
 	var velX = 0, velY = 0;
@@ -60,15 +61,15 @@ function VideoBox(x, y, lw, rw, vid, local)
 			// handle hands movement
 			if (movement.right*moveFactor > 200) {
     			// println("right = " + rightMovement);
-    			var force = movement.right/300;
+    			var force = movement.right/100;
     			this.applyForce(-force, -force*3);
-				rightWingVel += force/10; 
+				rightWingVel += force/15; 
   			}
 			if (movement.left*moveFactor > 200) {
     			// println("right = " + rightMovement);
-    			var force = movement.left/300;
+    			var force = movement.left/100;
     			this.applyForce(force, -force*3);
-				leftWingVel += force/10; 
+				leftWingVel += force/15; 
   			}
 
 	  		// apply parameters
@@ -91,8 +92,8 @@ function VideoBox(x, y, lw, rw, vid, local)
   		// handle wings rotation based on wings rotation velocity
 		leftWingT += leftWingVel;
 		rightWingT += rightWingVel;
-		leftWingRot = 0.3 + Math.sin(leftWingT)*Math.PI/4 - Math.PI/8;
-		rightWingRot = -0.3 - Math.sin(rightWingT)*Math.PI/4 + Math.PI/8;
+		leftWingRot = 0.3 - Math.PI/8 + Math.sin(leftWingT)*Math.PI/8;
+		rightWingRot = -0.3 + Math.PI/8 - Math.sin(rightWingT)*Math.PI/8;
 
 		if (isLocal) {
 			leftWingVel *= 0.7;
@@ -105,23 +106,27 @@ function VideoBox(x, y, lw, rw, vid, local)
   		context.translate(posX, posY);
 
    		// draw left wings
-   		context.translate(-sizeX/2+20, sizeY/3);
+   		context.translate(-sizeX/2+30, sizeY-50);
    		context.rotate(leftWingRot);
   		context.drawImage(leftWing, -leftWing.width, -leftWing.height/2);
   		context.rotate(-leftWingRot);
-  		context.translate(sizeX/2-20, -sizeY/3);
+  		context.translate(sizeX/2-30, -sizeY+50);
 
    		// draw right wings
-   		context.translate(sizeX/2-20, sizeY/3);
+   		context.translate(sizeX/2-30, sizeY-50);
    		context.rotate(rightWingRot);
   		context.drawImage(rightWing, 0, -rightWing.height/2);
   		context.rotate(-rightWingRot);
-  		context.translate(-sizeX/2+20, -sizeY/3);
+  		context.translate(-sizeX/2+30, -sizeY+50);
 
   		// draw video frame
   		context.scale(-1, 1);
  		context.drawImage(video, -sizeX/2, 0, sizeX, sizeY);
   		context.scale(-1, 1);
+
+  		// draw bird image on top of video
+ 		context.drawImage(birdImg, -sizeX/2-8, -30);
+
 
   		context.translate(-posX, -posY);
 	}

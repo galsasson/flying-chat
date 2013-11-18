@@ -22,7 +22,7 @@ var theirBox = null;
 var images = [{'src': "/bkg.png", 'loaded':false, 'img':null},
               {'src': "/leftwing.png", 'loaded':false, 'img':null},
               {'src': "/rightwing.png", 'loaded':false, 'img':null},
-              {'src': "/video_mask.png", 'loaded':false, 'img':null}];
+              {'src': "/birdsmall2.png", 'loaded':false, 'img':null}];
 var numImagesLoaded = 0;
 
 var callBtn;
@@ -93,7 +93,7 @@ function startMyStream(stream)
   myVideo.play();
   myVideo.style.visibility = "hidden";
 
-  myBox = new VideoBox(0, 0, images[1].img, images[2].img, myVideo, true);
+  myBox = new VideoBox(chatCanvas.width/2, 0, myVideo, true);
   myBox.init();
 
   requestAnimationFrame(draw);
@@ -107,7 +107,7 @@ function startTheirStream(stream)
   theirVideo.play();
   theirVideo.style.visibility = "hidden";
 
-  theirBox = new VideoBox(0, 0, images[1].img, images[2].img, theirVideo, false);
+  theirBox = new VideoBox(chatCanvas.width/2, 0, theirVideo, false);
   theirBox.init();
 }
 
