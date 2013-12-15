@@ -3,33 +3,30 @@
 <head>
   <title>FlapChat</title>
 
-  <link rel="stylesheet" href="style.css">
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   <script type="text/javascript" src="http://cdn.peerjs.com/0.3/peer.js"></script>
   <script type="text/javascript" src="chat.js"></script>
   <script type="text/javascript" src="Processor.js"></script>
   <script type="text/javascript" src="VideoBox.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Carrois+Gothic+SC|Montserrat' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-
-    <!-- hidden video elements -->
-    <div style="position: fixed; left: 0px; top: 0px;">
-      <video id="my-video" width="160" height="120" muted="true" style="position: fixed; left: 0px; top: 0px;"></video>
-      <video id="their-video" width="160" height="120" style="position: fixed; left: 0px; top: 0px;"></video>
-    </div>
+<body onload="setup();" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
 
     <!-- self id, text input, and call buttons -->
-    <div style="position: fixed; left: 10px; top: 10px;">
-      Your id: <span id="my-id">...</span>
-      <div class="pure-form">
-        <input type="text" placeholder="Call user id..." id="callto-id">
-        <a href="#" class="pure-button pure-button-success" id="make-call">Call</a>
-        <a href="#" class="pure-button pure-button-error" id="end-call">End call</a>
-      </div>
-
+    
+    <div style="position: fixed; left: 10px; top: 10px; padding: 0px; margin: 0px;">
+      <span id="my-id-label"></span><br />
+      <span id="my-id"></span>
+    </div>
       <!-- Big chat canvas -->
-      <canvas id="chat-canvas" width="1200" height="600" style="position: fixed; left: 10px; top: 80px;"></canvas>
-    </div>      
+    <div id="container" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+
+    <!-- bottom text -->
+    <div id="bottom-label" style="position: fixed; right: 10px; bottom: 10px; padding: 0px; margin: 0px;">
+    <span>flapchat.net  |  <a class="links" href="http://kimsuhyun.com" target="_blank">Su Hyun Kim</a> &amp <a class="links" href="http://galsasson.com" target="_blank">Gal Sasson</a></span>
+    </div>
+    
   </body>
 </html>

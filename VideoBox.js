@@ -128,24 +128,26 @@ function VideoBox(x, y, vid, local)
   		context.scale(-1, 1);
 
   		// draw bird image on top of video
- 		context.drawImage(birdImg, -sizeX/2-8, -35);
+ 		context.drawImage(birdImg, -sizeX/2-8, -40);
 
 
   		context.translate(-posX, -posY);
 	}
 
-	this.setValues = function(data)
+	this.setValues = function(data, w, h)
 	{
-		posX = data.x;
-		posY = data.y;
+		posX = data.x * w / 1000;
+		posY = data.y * h / 1000;
 		leftWingVel = data.lv;
 		rightWingVel = data.rv;
 	}
 
-	this.sendParams = function(conn)
+	this.sendParams = function(conn, w, h)
 	{
 		if (conn) {
-			var data = {'x':posX, 'y':posY, 'lv':leftWingVel, 'rv':rightWingVel};
+			var relX = Math.floor((posX/w)*1000);
+			var relY = Math.floor((posY/h)*1000);
+			var data = {'x':relX, 'y':relY, 'lv':leftWingVel, 'rv':rightWingVel};
 			conn.send(data);
 		}
 	}
@@ -172,7 +174,7 @@ function VideoBox(x, y, vid, local)
 
 		// handle sit on spot
 		if (posX > w - 250) {
-			if (posY > 30) {
+			if (posY > h/2-120) {
 				velX *= -1;
 				velY *= -1;
 				posX = lastPosX;
